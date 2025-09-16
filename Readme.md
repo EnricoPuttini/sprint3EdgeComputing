@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="URL_PARA_O_LOGO_DO_PASSABOLA" alt="Passa Bola Logo" width="150"/>
+  <img src="PAB3.png" alt="Passa Bola Logo" width="150"/>
 </p>
 
 <h1 align="center">Projeto Passa a Bola: Arquitetura IoT</h1>
