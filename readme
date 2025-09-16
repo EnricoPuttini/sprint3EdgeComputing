@@ -1,0 +1,122 @@
+<p align="center">
+  <img src="URL_PARA_O_LOGO_DO_PASSABOLA" alt="Passa Bola Logo" width="150"/>
+</p>
+
+<h1 align="center">Projeto Passa a Bola: Arquitetura IoT</h1>
+<p align="center">
+  <strong>Sprint 3: Edge Computing & Computer Systems</strong>
+</p>
+<p align="center">
+  Um protótipo de aplicação IoT para coleta e transmissão de dados de partidas de futebol feminino em tempo real.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/MQTT-660066?style=for-the-badge&logo=mqtt&logoColor=white" alt="MQTT">
+  <img src="https://img.shields.io/badge/Node--RED-8F0000?style=for-the-badge&logo=node-red&logoColor=white" alt="Node-RED">
+</p>
+
+---
+
+## 👥 Integrantes do Grupo
+
+| Nome Completo                     | RM     |
+| --------------------------------- | ------ |
+| **Giovanni Tarzoni Piccin** | 564014 |
+| **Enrico Gianni Nóbrega Puttini** | 561400 |
+| **Henrique Infanti Coratolo** | 561865 |
+| **Jean Carlos Rodrigues da Silva**| 566439 |
+| **Bruno Lobosque** | 561254 |
+
+---
+
+## 🎯 Descrição do Projeto
+
+Este projeto representa a arquitetura inicial de uma aplicação de Internet das Coisas (IoT) para o challenge "Passa a Bola", focado no futebol feminino. A solução visa atacar a dor da falta de dados e cobertura em tempo real das partidas, um problema que afeta o engajamento dos torcedores e a profissionalização da modalidade.
+
+O objetivo é criar um protótipo funcional capaz de **coletar** dados simulados de uma partida de futebol, **transmiti-los** através de um protocolo leve e eficiente (MQTT), e **visualizá-los** em uma plataforma de gerenciamento, demonstrando um fluxo de dados ponta-a-ponta em tempo real.
+
+---
+
+## 🏗️ Arquitetura Proposta
+
+A arquitetura foi desenhada para ser leve, escalável e em tempo real, utilizando componentes padrão de mercado para aplicações IoT.
+
+### Diagrama Visual
+![Diagrama da Arquitetura](diagramaIot.png)
+
+### Explicação dos Componentes
+
+O fluxo de dados da nossa arquitetura é composto por quatro etapas principais:
+
+1.  **Sensor (Dispositivo IoT Simulado):**
+    * **Tecnologia:** `Node.js`
+    * **Função:** Atua como um "dispositivo de campo", simulando a coleta de eventos de uma partida (ex: gol, posse de bola). A cada 5 segundos, um novo evento é gerado e publicado.
+
+2.  **Transmissão (Protocolo):**
+    * **Tecnologia:** `MQTT`
+    * **Função:** O sensor "publica" os dados em um tópico MQTT. Este protocolo foi escolhido por ser extremamente leve e rápido, ideal para comunicação em tempo real em cenários de IoT.
+
+3.  **Broker (Gerenciador de Mensagens):**
+    * **Tecnologia:** `HiveMQ` (Broker MQTT público)
+    * **Função:** Atua como uma central de mensagens. Ele recebe os dados publicados no tópico `passabola/partida/123` e os distribui para todos os clientes que "assinaram" este tópico.
+
+4.  **Plataforma (Receptor e Visualizador):**
+    * **Tecnologia:** `Node-RED`
+    * **Função:** Atua como nossa plataforma de gerenciamento. Um fluxo foi criado para "assinar" o tópico no Broker. Ao receber um novo dado, ele o exibe em tempo real, validando o sucesso da comunicação.
+
+---
+
+## 🛠️ Recursos Necessários
+
+* **Node.js (v18+):** Ambiente de execução para o sensor e o Node-RED.
+* **Biblioteca `mqtt` para Node.js:** Para a comunicação do sensor com o Broker.
+* **Node-RED:** Plataforma visual para criação do fluxo de recebimento.
+* **Broker MQTT Público:** `broker.hivemq.com`.
+
+---
+
+## 🚀 Instruções de Uso
+
+Para executar e testar este protótipo, siga os passos abaixo:
+
+### 1. Clonar o Repositório
+```bash
+git clone [https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git](https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git)
+cd SEU-REPOSITORIO
+```
+
+### 2. Instalar Dependências do Sensor
+Navegue até a pasta do sensor e instale a biblioteca MQTT:
+```bash
+npm install
+```
+
+### 3. Instalar e Iniciar o Node-RED
+Se o Node-RED não estiver instalado globalmente, instale-o:
+```bash
+npm install -g --unsafe-perm node-red
+```
+Depois, inicie a plataforma em um terminal:
+```bash
+node-red
+```
+Acesse a interface em `http://127.0.0.1:1880/` no seu navegador.
+
+### 4. Configurar o Fluxo no Node-RED
+1.  Arraste um nó **`mqtt in`** para a área de trabalho.
+    * **Server:** `broker.hivemq.com`
+    * **Port:** `1883`
+    * **Topic:** `passabola/partida/123`
+2.  Arraste um nó **`debug`** para a área de trabalho.
+3.  Conecte a saída do nó `mqtt in` à entrada do nó `debug`.
+4.  Clique em **"Deploy"**.
+
+### 5. Executar o Sensor
+Em um **novo terminal**, navegue até a pasta do sensor e execute o script:
+```bash
+node sensor.js
+```
+
+### 6. Visualizar os Dados
+Observe a aba de **Debug** (ícone de inseto 🐞) no painel direito do Node-RED. Os dados do jogo simulado aparecerão a cada 5 segundos, confirmando que a arquitetura está 100% funcional.
